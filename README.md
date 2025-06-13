@@ -10,7 +10,6 @@ Este script automatiza o processo de cadastro de materiais no sistema SIC utiliz
 * pandas
 * pyautogui
 * pyperclip
-* openpyxl (dependência do pandas para Excel)
 
 ---
 
