@@ -5,6 +5,7 @@ import pyautogui
 import os
 import pyperclip
 from tkinter import messagebox, Tk
+from openpyxl import load_workbook
 
 # Pop-ups visuais usando tkinter
 Tk().withdraw()
@@ -121,7 +122,21 @@ for (gerador, data), grupo in grupos:
 
 # Exportar resultados
 saida_path = r"C:\Users\Lucas\OneDrive\Trabalho\Planilhas de excel\log_resultado_automacao.xlsx"
-tabela.to_excel(saida_path, index=False)
+
+# Adiciona data/hora da execução aos dados novos
+tabela["Data Registro"] = pd.Timestamp.now()
+
+# Verifica se o arquivo já existe
+if os.path.exists(saida_path):
+    # Lê o conteúdo antigo
+    tabela_antiga = pd.read_excel(saida_path)
+    # Junta com os dados novos
+    tabela_final = pd.concat([tabela_antiga, tabela], ignore_index=True)
+else:
+    tabela_final = tabela
+
+# Salva a nova versão completa (sem sobrescrever dados anteriores)
+tabela_final.to_excel(saida_path, index=False)
 
 # Pop-up final
 messagebox.showinfo("Automação Finalizada", f"A automação foi concluída!\n\nLog salvo em:\n{saida_path}")
