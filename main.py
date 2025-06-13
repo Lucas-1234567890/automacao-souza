@@ -13,15 +13,17 @@ def encontrar_imagem(imagem):
     timeout = 20
     inicio = time()
     encontrou = None
+    caminho_imagem = os.path.join("imagens", imagem)  # <- caminho relativo correto
+
     while True:
         try:
-            encontrou = pyautogui.locateOnScreen(imagem, grayscale=True, confidence=0.8)
+            encontrou = pyautogui.locateOnScreen(caminho_imagem, grayscale=True, confidence=0.8)
             if encontrou:
                 break
         except Exception:
             pass
         if time() - inicio > timeout:
-            print(f'Tempo limite atingido. Imagem não encontrada: {imagem}')
+            print(f'Tempo limite atingido. Imagem não encontrada: {caminho_imagem}')
             break
         sleep(1)
     return encontrou
