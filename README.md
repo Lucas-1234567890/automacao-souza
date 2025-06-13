@@ -119,6 +119,36 @@ Percorre os dados por grupo e cadastra item a item com tratamento de erro e regi
 * ✅ Planilha `status_cadastro.xlsx` com resultados
 * ✅ Pop-up visual no início e no fim com `pyautogui.alert()`
 
+
+# Explicação do uso de `groupby` com loop `for` em pandas
+
+O método `groupby` do pandas agrupa os dados de um DataFrame com base em uma ou mais colunas. O resultado é um objeto iterável que retorna pares de chave e grupo.
+
+## Como funciona:
+
+```python
+grupos = tabela.groupby(["Coluna1", "Coluna2"])
+
+for (valor_col1, valor_col2), grupo in grupos:
+    print(f"Grupo: ({valor_col1}, {valor_col2})")
+    print(grupo)
+    print("-" * 40)
+
+Grupo: (G1, 2024-06-10)
+  Gerador        Data  Quantidade
+0      G1  2024-06-10           5
+1      G1  2024-06-10           3
+----------------------------------------
+Grupo: (G2, 2024-06-11)
+  Gerador        Data  Quantidade
+2      G2  2024-06-11           7
+----------------------------------------
+Grupo: (G2, 2024-06-12)
+  Gerador        Data  Quantidade
+3      G2  2024-06-12           2
+----------------------------------------
+
+
 ---
 
 ## 🚀 Como Rodar
