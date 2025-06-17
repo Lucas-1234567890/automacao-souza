@@ -87,7 +87,7 @@ def iniciar_automacao(arquivo_excel):
                         sleep(0.3)
                         pyautogui.press('tab')
                         sleep(0.3)
-                        pyautogui.write("00" + str(linha["ID Interno"]))
+                        pyautogui.write(str(linha["ID Interno"]).zfill(6)
                         sleep(0.3)
                         pyautogui.press('tab')
                         sleep(0.3)
