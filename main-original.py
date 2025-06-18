@@ -95,14 +95,14 @@ for (gerador, data), grupo in grupos:
                 sleep(0.3)
                 pyautogui.press('tab')
                 sleep(0.3)
-                pyautogui.write("00" + str(linha["ID Interno"]))
+                pyautogui.write(str(linha["ID Interno"]).zfill(6))
                 sleep(0.3)
                 pyautogui.press('tab')
                 sleep(0.3)
                 pyautogui.press('tab')
                 sleep(0.3)
                 pyautogui.press('tab')
-                sleep(0.3)
+                sleep(1)
                 pyautogui.click(1010, 617)  # fecha o pop-up se aparecer
                 sleep(0.3)
 

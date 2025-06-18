@@ -13,20 +13,19 @@ def encontrar_imagem(imagem):
     timeout = 20
     inicio = time()
     encontrou = None
-    caminho_imagem = os.path.join("imagens", imagem)  # <- caminho relativo correto
-
     while True:
         try:
-            encontrou = pyautogui.locateOnScreen(caminho_imagem, grayscale=True, confidence=0.8)
+            encontrou = pyautogui.locateOnScreen(imagem, grayscale=True, confidence=0.8)
             if encontrou:
                 break
         except Exception:
             pass
         if time() - inicio > timeout:
-            print(f'Tempo limite atingido. Imagem não encontrada: {caminho_imagem}')
+            print(f'Tempo limite atingido. Imagem não encontrada: {imagem}')
             break
         sleep(1)
     return encontrou
+
 
 def direita(posicoes_imagem):
     return posicoes_imagem[0] + posicoes_imagem[2], posicoes_imagem[1] + posicoes_imagem[3]/2
@@ -42,6 +41,7 @@ def escrever_texto(texto):
 def iniciar_automacao(arquivo_excel):
     try:
         tabela = pd.read_excel(arquivo_excel, sheet_name="Cadastro de materiais", skiprows=3, usecols="F:L")
+        tabela["Data"] = pd.to_datetime(tabela["Data"]).dt.strftime("%d/%m/%Y")
         tabela["Status"] = "Nao"
 
         pyautogui.FAILSAFE = True
@@ -74,7 +74,8 @@ def iniciar_automacao(arquivo_excel):
                 pyautogui.press('enter')
                 sleep(1.5)
 
-                pyautogui.click(pyautogui.center(encontrar_imagem('data.png')))
+                pyautogui.doubleClick(x=650, y=337) # Data 26/05/2025
+                sleep(1)
                 escrever_texto(str(data))
                 sleep(1.5)
 
@@ -87,15 +88,15 @@ def iniciar_automacao(arquivo_excel):
                         sleep(0.3)
                         pyautogui.press('tab')
                         sleep(0.3)
-                        pyautogui.write("00" + str(linha["ID Interno"]))
+                        pyautogui.write(str(linha["ID Interno"]).zfill(6))
                         sleep(0.3)
                         pyautogui.press('tab')
                         sleep(0.3)
                         pyautogui.press('tab')
                         sleep(0.3)
                         pyautogui.press('tab')
-                        sleep(0.3)
-                        pyautogui.click(1010, 617)
+                        sleep(1)
+                        pyautogui.click(1014, 629)
                         sleep(0.3)
 
                         tabela.at[idx, "Status"] = "Sim"
@@ -103,12 +104,14 @@ def iniciar_automacao(arquivo_excel):
                     except Exception as e:
                         print(f"Erro ao cadastrar linha: {e}")
                         tabela.at[idx, "Status"] = "Nao"
-
+                sleep(1)
                 pyautogui.click(pyautogui.center(encontrar_imagem('gravar.png')))
                 sleep(1.5)
+                pyautogui.click( 1016, 628)
+                sleep(1)
                 pyautogui.click(pyautogui.center(encontrar_imagem('souza.png')))
                 sleep(0.8)
-
+   
             except Exception as e:
                 print(f"Erro no grupo ({gerador}, {data}): {e}")
 
