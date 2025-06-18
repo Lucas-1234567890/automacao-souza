@@ -1,69 +1,85 @@
-# 📄 Automacao de Cadastro de Materiais – Auto Eletrica Souza
+# ⚙️ Automação de Cadastro de Materiais – Auto Elétrica Souza
 
-Este script automatiza o processo de cadastro de materiais no sistema SIC utilizando **Python + PyAutoGUI**. Ele le uma planilha Excel com os dados de materiais e simula a entrada manual no sistema, agrupando por **Gerador** e **Data**.
-
----
-
-## ⚙️ Tecnologias Utilizadas
-
-* Python 3.11+
-* pandas
-* pyautogui
-* pyperclip
+Este projeto automatiza o processo de cadastro de materiais no sistema SIC usando **Python** e **PyAutoGUI**, simulando entradas humanas a partir de dados em uma planilha Excel. Cada material é inserido conforme agrupamentos por **Gerador** e **Data**.
 
 ---
 
-## 📂 Estrutura de Arquivos
+## 🧰 Tecnologias Utilizadas
+
+- Python 3.11+
+- pandas
+- pyautogui
+- pyperclip
+- openpyxl
+- tkinter (para pop-ups visuais)
+
+---
+
+## 📁 Estrutura de Arquivos
 
 ```
 automacao-cadastro/
 │
-├── main.py                      # Script principal da automação
-├── Auto_Eletrica_Souza_Geradores.xlsm  # Planilha de entrada
-└── status_cadastro.xlsx         # Planilha gerada com o status de cada grupo
+├── main.py # Script principal da automação
+├── imagens/ # Prints usados para localizar elementos na tela
+│ ├── atualizacao.png
+│ ├── saida.png
+│ └── ...
+├── Auto_Eletrica_Souza_Geradores.xlsm # Planilha de entrada
+└── log_resultado_automacao.xlsx # Planilha de log gerada com o status final
 ```
+
+---
+
 
 ---
 
 ## ▶️ Como Funciona
 
-### 1. Abrir o sistema
+### 1. Inicialização
 
-O script inicia o sistema SIC automaticamente e realiza o login com credenciais pré-definidas.
+- Exibe um pop-up de boas-vindas com `tkinter.messagebox`
+- Abre o sistema SIC automaticamente via atalho `.lnk`
+- Faz login usando credenciais definidas no código
 
-### 2. Ler dados do Excel
+### 2. Leitura da Planilha
 
-A planilha contém as seguintes colunas:
+A planilha precisa conter as colunas:
 
-* `Gerador`
-* `Data`
-* `ID Interno`
-* `Quantidade`
+- `Gerador`
+- `Data`
+- `ID Interno`
+- `Quantidade`
 
-As linhas são agrupadas por Gerador e Data usando `groupby`.
+As linhas são agrupadas por `Gerador` e `Data` para processar em blocos.
 
-### 3. Preencher campos no sistema
+### 3. Preenchimento no Sistema
 
 Para cada grupo:
 
-* Preenche o campo de Gerador
-* Preenche a Data
-* Cadastra item por item: Quantidade e Código do Produto
-* Clica em uma posição fixa para ignorar pop-ups
-* Salva o grupo
-* Retorna à tela inicial
+- Preenche o campo Gerador
+- Preenche a Data
+- Insere cada material: Quantidade e Código
+- Clica em posição fixa (1010, 617) para fechar pop-ups inesperados
+- Salva os dados e volta para tela inicial
 
-### 4. Registro de status
+### 4. Log e Exportação
 
-Gera a planilha `status_cadastro.xlsx` com os seguintes campos:
-
-* `Gerador`
-* `Data`
-* `Status` → "Sim" se foi cadastrado, "Não" se falhou
+- Adiciona uma coluna `Status` para indicar "Sim"/"Não"
+- Registra `Data Registro` da automação
+- Junta com log anterior (se existir) sem sobrescrever
+- Salva tudo no `log_resultado_automacao.xlsx`
+- Exibe pop-up final com caminho do arquivo salvo
 
 ---
 
-## 📌 Trechos Importantes
+## 📌 Trechos-Chave
+
+### 🖼️ Localização de Elementos via Imagem
+
+```python
+caminho_imagem = os.path.join("imagens", imagem)
+pyautogui.locateOnScreen(caminho_imagem, grayscale=True, confidence=0.8)
 
 ### Função de localização com timeout
 
@@ -102,6 +118,36 @@ Percorre os dados por grupo e cadastra item a item com tratamento de erro e regi
 * ✅ Redução de `sleep()` para acelerar preenchimento
 * ✅ Planilha `status_cadastro.xlsx` com resultados
 * ✅ Pop-up visual no início e no fim com `pyautogui.alert()`
+
+
+# Explicação do uso de `groupby` com loop `for` em pandas
+
+O método `groupby` do pandas agrupa os dados de um DataFrame com base em uma ou mais colunas. O resultado é um objeto iterável que retorna pares de chave e grupo.
+
+## Como funciona:
+
+```python
+grupos = tabela.groupby(["Coluna1", "Coluna2"])
+
+for (valor_col1, valor_col2), grupo in grupos:
+    print(f"Grupo: ({valor_col1}, {valor_col2})")
+    print(grupo)
+    print("-" * 40)
+
+Grupo: (G1, 2024-06-10)
+  Gerador        Data  Quantidade
+0      G1  2024-06-10           5
+1      G1  2024-06-10           3
+----------------------------------------
+Grupo: (G2, 2024-06-11)
+  Gerador        Data  Quantidade
+2      G2  2024-06-11           7
+----------------------------------------
+Grupo: (G2, 2024-06-12)
+  Gerador        Data  Quantidade
+3      G2  2024-06-12           2
+----------------------------------------
+
 
 ---
 
