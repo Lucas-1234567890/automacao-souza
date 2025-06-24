@@ -124,6 +124,90 @@ O Dashboard Power BI consome os dados da planilha consolidada para entregar os s
 - Visualizações com **gráficos de barras**, **linhas** e **mapas de calor** para identificar os maiores pontos de custo.
 
 ---
+# 🚀 Primeiros Passos e Como Rodar
+
+Para utilizar e manter este projeto, siga os passos abaixo:
+
+---
+
+## ⚙️ Pré-requisitos
+
+- Microsoft Excel (2016 ou superior)  
+- Python 3.9+ (recomendado, por conta do uso de `os.startfile` e `datetime`)  
+- Power BI Desktop  
+- Acesso ao sistema SIC com credenciais válidas  
+
+---
+
+## 📦 Instalação das Dependências (Python)
+
+1. Navegue até a pasta `automacao-souza/` no terminal.  
+2. Crie um arquivo `requirements.txt` na raiz do projeto com o conteúdo:
+- pandas
+- pyautogui
+- pyperclip
+- openpyxl
+
+3. Instale as dependências com:
+
+```bash
+pip install -r requirements.txt
+ou
+pip install pandas pyautogui pyperclip openpyxl
+```
+## ▶️ Como Executar a Automação
+
+1. Ajuste os caminhos no `main.py`:
+
+   - Atalho do SIC:  
+     `C:\Users\Lucas\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\sic.lnk`
+
+   - Pasta para salvar logs:  
+     `C:\Users\Lucas\OneDrive\Trabalho\Planilhas de excel\logs_automacao`
+
+   > **Atenção:** Ajuste esses caminhos para o ambiente da sua máquina.
+
+2. Abra o arquivo Excel com o formulário VBA, ex: `Cadastro_Materiais_AE_Souza.xlsm`.
+
+3. Cadastre os materiais via formulário VBA na aba **"Cadastro de materiais"** (recomendado).
+
+4. Salve a planilha.
+
+5. Certifique-se de que os técnicos deram baixa nos materiais usados.
+
+6. Execute a automação Python:
+
+```bash
+python main.py
+```
+Na interface que abrir:
+
+- Clique em **Selecionar Planilha** e escolha seu arquivo Excel.  
+- Clique em **Iniciar Automação** para rodar o processo.  
+- Aguarde o término e confira a mensagem de sucesso.  
+- Verifique os logs gerados na pasta configurada (`logs_automacao`).  
+
+---
+
+## 📊 Visualização no Power BI
+
+- Abra o arquivo Power BI, ex: `Dashboard_Custos_Manutencao.pbix`.  
+- Certifique-se que o Power Query atualizou os dados dos logs.  
+- Caso necessário, clique em **Atualizar** para carregar os dados mais recentes.  
+- O Power BI está configurado para atualizar automaticamente todos os dias às 10h via Power Automate (não é preciso atualizar manualmente todo dia).  
+
+---
+
+## 💡 Fluxo Recomendado Resumido
+
+- Cadastre os materiais na planilha principal usando o formulário VBA (recomendado).  
+- Salve o arquivo.  
+- Após os técnicos darem baixa nos materiais usados, rode a automação Python conforme tutorial acima.  
+- Confira o log para garantir que tudo ocorreu bem.  
+- Atualize a planilha que consolida os logs via Power Query.  
+- Analise o custo da manutenção.  
+- Alimente essa informação na planilha principal, que serve de base para o Power BI.  
+
 
 ### 🎯 Diferenciais Técnicos do Projeto
 
