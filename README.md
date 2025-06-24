@@ -82,11 +82,13 @@ O script `main.py` faz a leitura da planilha e interage automaticamente com o si
 7. Gera um log final com o status de cada linha (Sucesso ou Falha).
 
 #### Estrutura de pastas:
-automacao-souza/
-├── imagens/ # Prints dos botões e telas do SIC para o PyAutoGUI
-├── main.py # Código Python da automação
-├── logs_automacao/ # Onde os logs em Excel são salvos após cada execução
 
+```plaintext
+automacao-souza/
+├── imagens/            # Prints dos botões e telas do SIC para o PyAutoGUI
+├── main.py             # Código Python da automação
+├── logs_automacao/     # Onde os logs em Excel são salvos após cada execução
+```
 
 ### 4. Consolidação dos Logs via Power Query
 
