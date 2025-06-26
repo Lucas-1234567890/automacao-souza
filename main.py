@@ -7,6 +7,7 @@ import pyperclip
 from tkinter import Tk, Label, Button, filedialog, messagebox
 from openpyxl import load_workbook
 import threading
+from datetime import datetime
 
 # ---------- Funções auxiliares ----------
 def encontrar_imagem(imagem):
@@ -26,9 +27,8 @@ def encontrar_imagem(imagem):
         sleep(1)
     return encontrou
 
-
 def direita(posicoes_imagem):
-    return posicoes_imagem[0] + posicoes_imagem[2], posicoes_imagem[1] + posicoes_imagem[3]/2
+    return posicoes_imagem[0] + posicoes_imagem[2], posicoes_imagem[1] + posicoes_imagem[3] / 2
 
 def esquerda(posicao_imagem, deslocamento=5):
     return posicao_imagem[0] + deslocamento, posicao_imagem[1] + posicao_imagem[3] / 2
@@ -56,30 +56,33 @@ def iniciar_automacao(arquivo_excel):
         sleep(1)
         pyautogui.hotkey("ctrl", "e")
         sleep(0.5)
-        pyautogui.click(pyautogui.center(encontrar_imagem('atualizacao.png')))
+
+        pyautogui.click(pyautogui.center(encontrar_imagem(os.path.join('imagens', 'atualizacao.png'))))
         sleep(0.5)
-        pyautogui.click(pyautogui.center(encontrar_imagem('saida.png')))
+        pyautogui.click(pyautogui.center(encontrar_imagem(os.path.join('imagens', 'saida.png'))))
         sleep(0.5)
-        pyautogui.click(esquerda(encontrar_imagem('outros.png')))
+        pyautogui.click(esquerda(encontrar_imagem(os.path.join('imagens', 'outros.png'))))
         sleep(0.5)
-        pyautogui.click(pyautogui.center(encontrar_imagem('souza.png')))
+        pyautogui.click(pyautogui.center(encontrar_imagem(os.path.join('imagens', 'souza.png'))))
+        sleep(0.5)
+        pyautogui.click(pyautogui.center(encontrar_imagem(os.path.join('imagens', 'max.png'))))
+        sleep(1)
 
         grupos = tabela.groupby(["Gerador", "Data"])
 
         for (gerador, data), grupo in grupos:
             try:
-                pyautogui.click(direita(encontrar_imagem('gerador.png')))
+                pyautogui.click(direita(encontrar_imagem(os.path.join('imagens', 'gerador.png'))))
                 pyautogui.write(str(gerador))
                 sleep(0.8)
                 pyautogui.press('enter')
                 sleep(1.5)
-
-                pyautogui.doubleClick(x=650, y=337) # Data 26/05/2025
+                pyautogui.doubleClick(79, 60)
                 sleep(1)
                 escrever_texto(str(data))
                 sleep(1.5)
 
-                pyautogui.click(pyautogui.center(encontrar_imagem('quantidade.png')))
+                pyautogui.click(pyautogui.center(encontrar_imagem(os.path.join('imagens', 'quantidade.png'))))
                 sleep(0.5)
 
                 for idx, linha in grupo.iterrows():
@@ -88,7 +91,7 @@ def iniciar_automacao(arquivo_excel):
                         sleep(0.3)
                         pyautogui.press('tab')
                         sleep(0.3)
-                        pyautogui.write(str(linha["ID Interno"]).zfill(6)
+                        pyautogui.write(str(linha["ID Interno"]).zfill(6))
                         sleep(0.3)
                         pyautogui.press('tab')
                         sleep(0.3)
@@ -96,37 +99,42 @@ def iniciar_automacao(arquivo_excel):
                         sleep(0.3)
                         pyautogui.press('tab')
                         sleep(1)
-                        pyautogui.click(1014, 629)
+                        imagem = pyautogui.locateCenterOnScreen(os.path.join('imagens', 'sim.png'), confidence=0.9)
+                        if imagem:
+                            pyautogui.click(imagem.x, imagem.y)
                         sleep(0.3)
-
                         tabela.at[idx, "Status"] = "Sim"
 
                     except Exception as e:
                         print(f"Erro ao cadastrar linha: {e}")
                         tabela.at[idx, "Status"] = "Nao"
+
                 sleep(1)
-                pyautogui.click(pyautogui.center(encontrar_imagem('gravar.png')))
+                pyautogui.click(pyautogui.center(encontrar_imagem(os.path.join('imagens', 'gravar.png'))))
                 sleep(1.5)
-                pyautogui.click( 1016, 628)
+                imagem_2 = pyautogui.locateOnScreen(os.path.join('imagens', 'sim_nao.png'), confidence=0.9)
+                sleep(0.3)
+                if imagem_2:
+                    sleep(1)
+                    pyautogui.click(esquerda(imagem_2))
                 sleep(1)
-                pyautogui.click(pyautogui.center(encontrar_imagem('souza.png')))
+                pyautogui.click(pyautogui.center(encontrar_imagem(os.path.join('imagens', 'souza.png'))))
                 sleep(0.8)
-   
+
             except Exception as e:
                 print(f"Erro no grupo ({gerador}, {data}): {e}")
 
-        saida_path = r"C:\Users\Lucas\OneDrive\Trabalho\Planilhas de excel\log_resultado_automacao.xlsx"
+        pasta_logs = r"C:\Users\Lucas\OneDrive\Trabalho\Planilhas de excel\logs_automacao"
+        os.makedirs(pasta_logs, exist_ok=True)
+
+        data_hora_execucao = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+        saida_path = os.path.join(pasta_logs, f"log_{data_hora_execucao}.xlsx")
+
         tabela["Data Registro"] = pd.Timestamp.now()
-
-        if os.path.exists(saida_path):
-            tabela_antiga = pd.read_excel(saida_path)
-            tabela_final = pd.concat([tabela_antiga, tabela], ignore_index=True)
-        else:
-            tabela_final = tabela
-
-        tabela_final.to_excel(saida_path, index=False)
+        tabela.to_excel(saida_path, index=False)
 
         messagebox.showinfo("Concluído", f"A automação foi finalizada!\n\nLog salvo em:\n{saida_path}")
+
     except Exception as e:
         messagebox.showerror("Erro", f"Ocorreu um erro:\n{str(e)}")
 
