@@ -90,7 +90,17 @@ automacao-souza/
 ├── logs_automacao/     # Onde os logs em Excel são salvos após cada execução
 ```
 
-### 4. Consolidação dos Logs via Power Query
+---
+
+## 4. Envio de Relatórios por WhatsApp (whatsapp.py)
+- Script em Python que lê a planilha de materiais usados e envia um resumo por WhatsApp para o técnico responsável.
+- Usa Selenium para abrir o WhatsApp Web e mandar as mensagens automaticamente.
+- Precisa que você tenha a coluna Telefone na planilha, para identificar o número de cada técnico.
+- Mensagem formatada com negrito, emojis e lista para ficar mais amigável.
+
+---
+
+### 5. Consolidação dos Logs via Power Query
 
 - Todos os logs de execução (gerados pelo Python) ficam na pasta `/logs_automacao`.
 - No **Power Query**, foi criado um processo de **importação em lote** desses logs.
@@ -98,7 +108,7 @@ automacao-souza/
 
 ---
 
-### 5. Cálculo de Custos de Manutenção
+### 6. Cálculo de Custos de Manutenção
 
 O processo de cálculo de custos envolve:
 
@@ -109,7 +119,7 @@ O processo de cálculo de custos envolve:
 
 ---
 
-### 6. Integração com o Dashboard Power BI
+### 7. Integração com o Dashboard Power BI
 
 O Dashboard Power BI consome os dados da planilha consolidada para entregar os seguintes indicadores:
 
