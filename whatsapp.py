@@ -6,6 +6,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # CONFIG
 CAMINHO_ARQUIVO = r"C:\Users\Lucas\OneDrive\Trabalho\Planilhas de excel\Auto_Elétrica_Souza_Geradores.xlsm"
@@ -76,12 +78,16 @@ for telefone, mensagem, tecnico, gerador, data in mensagens:
     link = f"https://web.whatsapp.com/send?phone=55{telefone}&text={texto}"
 
     navegador.get(link)
-    while len(navegador.find_elements(By.ID, 'side')) < 1:
-        sleep(1)
-    sleep(3)
+
+    # Espera até o lado esquerdo carregar, indicando que a conversa abriu
+    wait = WebDriverWait(navegador, 15)
+    wait.until(EC.presence_of_element_located((By.ID, 'side')))
 
     try:
-        botao_enviar = navegador.find_element(By.XPATH, '//*[@id="main"]/footer/div[1]/div/span/div/div[2]/div/div[4]/button')
+        # Espera o botão enviar ficar clicável e clica na hora
+        botao_enviar = wait.until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="main"]/footer/div[1]/div/span/div/div[2]/div/div[4]/button'))
+        )
         botao_enviar.click()
         print(f"✅ Mensagem enviada para {telefone}")
 
