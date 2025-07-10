@@ -3,7 +3,8 @@ __pycache__/
 .venv/
 dist/
 build/
-
+dist/main/
+build/main/
 *.py[cod]
 *$py.class
 
