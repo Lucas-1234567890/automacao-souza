@@ -14,7 +14,7 @@ CAMINHO_ARQUIVO = r"C:\Users\Lucas\OneDrive\Trabalho\Planilhas de excel\Auto_El�
 ABA = "Cadastro de materiais"
 CAMINHO_LOG = r"C:\Users\Lucas\OneDrive\Trabalho\Planilhas de excel\log_envios.csv"
 
-# CARREGAR PLANILHA
+# CARREGAR PLANILHA 
 tabela = pd.read_excel(CAMINHO_ARQUIVO, sheet_name=ABA, skiprows=3, usecols="F:N")
 tabela["Data"] = pd.to_datetime(tabela["Data"]).dt.strftime("%d/%m/%Y")
 
@@ -51,7 +51,7 @@ for (tecnico, telefone, gerador, data), grupo in grupos:
     msg += f"*Materiais utilizados:*\n"
 
     for _, linha in grupo.iterrows():
-        nome = linha.get("Materiais") or "Sem nome"
+        nome = (linha.get("Materiais") or "Sem nome").strip()
         qtde = linha.get("Quantidade") or 0
         msg += f"• *{nome}* — _{qtde} unidade(s)_\n"
 
@@ -79,16 +79,24 @@ for telefone, mensagem, tecnico, gerador, data in mensagens:
 
     navegador.get(link)
 
-    # Espera até o lado esquerdo carregar, indicando que a conversa abriu
+   
     wait = WebDriverWait(navegador, 15)
     wait.until(EC.presence_of_element_located((By.ID, 'side')))
 
     try:
-        # Espera o botão enviar ficar clicável e clica na hora
+        
         botao_enviar = wait.until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="main"]/footer/div[1]/div/span/div/div[2]/div/div[4]/button'))
         )
         botao_enviar.click()
+        try:
+            
+            WebDriverWait(navegador, 5).until(EC.presence_of_element_located((By.XPATH, '//*[@id="main"]/div[2]/div/div[2]/div[3]/div[last()]/div/div/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div/div/span')))
+        
+        except:
+            
+            print("⚠️ Mensagem pode não ter sido enviada, verifique manualmente.")
+
         print(f"✅ Mensagem enviada para {telefone}")
 
         # Salvar no log
