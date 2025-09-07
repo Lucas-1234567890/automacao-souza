@@ -346,9 +346,9 @@ pip install --upgrade -r requirements.txt
 ## 📞 Contato e Suporte
 
 ### 👨‍💻 Desenvolvedor Principal
-**Lucas Souza** - Engenharia de Dados e IA  
-- 📧 Email: [seu-email@empresa.com]
-- 💼 LinkedIn: [seu-linkedin]
+**Lucas Amorim Porciuncula** - Engenharia de Dados e IA  
+- 📧 Email: [lucas.amorim.porciuncula@gmail.com]
+- 💼 LinkedIn: [(https://www.linkedin.com/in/lucas-amorim-powerbi/)]
 - 🐛 Issues: [Crie uma issue neste repositório](https://github.com/seu-usuario/automacao-souza/issues)
 
 ### 🆘 Em Caso de Problemas
