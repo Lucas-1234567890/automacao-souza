@@ -556,11 +556,12 @@ class SistemaAutomacaoSIC:
                             break
                             
                         try:
-                            self.escrever_texto(str(linha["Quantidade"]))
+                            self.escrever_texto(str(int(linha["Quantidade"])))
+
                             sleep(0.3)
                             pyautogui.press('tab')
                             sleep(0.3)
-                            pyautogui.write(str(linha["ID Interno"]).zfill(6))
+                            pyautogui.write(str(int(linha["ID Interno"])).zfill(6))
                             sleep(0.3)
                             pyautogui.press('tab')
                             sleep(0.3)
